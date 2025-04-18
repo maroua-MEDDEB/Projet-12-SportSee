@@ -9,31 +9,24 @@ import {
   ApiText,
   LabelContainer,
 } from "./index.style.js";
-
-const initialState = {
-  isLoading: true,
-  error: null,
-  data: null,
-};
+import getAllUsersData from "../../service/usersServices.js";
 
 function Home() {
-  const [state, setState] = useState(initialState);
+  const [data, setData] = useState([]);
 
-  const { data, isLoading } = state;
-
-  const [checked, setChecked] = useState(false);
-
-  const handleChange = (prev) => {
-    setChecked(prev, !prev);
-  };
-
-  if (isLoading) return <p> loading...</p>;
+  useEffect(() => {
+    console.log("bonjour");
+    getAllUsersData().then((result) => {
+      console.log(result);
+      setData(result.data);
+    });
+  }, []);
 
   return (
     //page intermédiaire vers la page d'utilisateur
     <>
       <HomeContainer>
-        <HeaderHomeContainer>
+        {/* <HeaderHomeContainer>
           <Titlespan>Bienvenue!</Titlespan>
           <LabelContainer>
             <label>
@@ -45,17 +38,19 @@ function Home() {
               />
             </label>
           </LabelContainer>
-        </HeaderHomeContainer>
+        </HeaderHomeContainer> */}
         <TitleDiv>
-          {data?.userMainData?.map((element, index) => (
-            <Profil
-              key={index}
-              userId={element?.userId}
-              userInfos={element.userInfos}
-              imageSrc={`/images/${element.userInfos.firstName}.png`}
-              api={checked}
-              data={element}
-            />
+          {data?.map((element, index) => (
+            <>
+              <Profil
+                key={index}
+                userId={element?.userId}
+                userInfos={element.userInfos}
+                imageSrc={`http://localhost:3000/${element?.id}.png`}
+                api={true}
+                data={element}
+              />
+            </>
           ))}
         </TitleDiv>
       </HomeContainer>
