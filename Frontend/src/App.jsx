@@ -1,8 +1,8 @@
 import React from "react";
 import { Route, Routes } from "react-router-dom";
 import Home from "./Pages/Home/Home";
-import NavBarHorizontal from "../../ancien frontend/src/components/NavBarHorizontal/NavBarHorizontal";
-import NavBarVertical from "../../ancien frontend/src/components/NavBarVertical/NavBarVertical";
+import NavBarVertical from "./components/NavBarVertical/NavBarVertical";
+import NavBarHorizontal from "./components/NavBarHorizontal/NavBarHorizontal";
 import "./App.css";
 function App() {
   return (

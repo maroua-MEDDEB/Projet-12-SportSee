@@ -1,6 +1,5 @@
 import { Profil } from "../../components";
 import React, { useEffect, useState } from "react";
-import { getAllDataMocked } from "../../service/mockedAPI";
 import Switch from "react-switch";
 import {
   HomeContainer,
@@ -27,29 +26,6 @@ function Home() {
   const handleChange = (prev) => {
     setChecked(prev, !prev);
   };
-
-  useEffect(() => {
-    /**
-     * Retrieves all data using a mocked API endpoint.
-     *@return {Promise} A promise that resolves with the data response.
-     */
-    async function getMockedData() {
-      try {
-        const userData = await getAllDataMocked();
-
-        setState({
-          ...state,
-          data: userData,
-
-          error: "",
-          isLoading: false,
-        });
-      } catch (error) {
-        setState({ ...state, error, isLoading: false });
-      }
-    }
-    getMockedData();
-  }, []);
 
   if (isLoading) return <p> loading...</p>;
 
