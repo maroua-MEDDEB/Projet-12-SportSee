@@ -1,0 +1,15 @@
+* {
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+:root {
+  --color--light: #ffffff;
+  --color--primary: #ff0101;
+  --color--navbar: #020203;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+}

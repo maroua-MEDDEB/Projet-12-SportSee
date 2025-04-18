@@ -1,0 +1,6 @@
+.text_error {
+  text-align: center;
+}
+.text_error h1 {
+  color: var(--color--primary);
+}
