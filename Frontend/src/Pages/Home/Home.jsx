@@ -18,7 +18,7 @@ function Home() {
     console.log("bonjour");
     getAllUsersData().then((result) => {
       console.log(result);
-      setData(result.data);
+      setData(result);
     });
   }, []);
 
@@ -44,7 +44,7 @@ function Home() {
             <>
               <Profil
                 key={index}
-                userId={element?.userId}
+                userId={element?.id}
                 userInfos={element.userInfos}
                 imageSrc={`http://localhost:3000/${element?.id}.png`}
                 api={true}

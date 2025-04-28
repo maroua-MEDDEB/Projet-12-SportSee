@@ -19,12 +19,13 @@ import {
 import { CustomTooltip } from "../CustomTooltip/CustomTooltip.jsx";
 
 export function ActivityDays({ userId, data, api = false, activiytDaysApi }) {
-  const activityDays = new Activity(userId, data?.userActivities)._activities;
+  console.log(data);
+  const activityDays = new Activity(userId, data?.sessions)._activities;
   console.log("activityDays : ", activityDays);
 
   const activitiesDaysApi = new Activity(
     userId,
-    data?.userActivities,
+    data?.sessions,
     activiytDaysApi
   )._activitiesApi;
   console.log("activitiesDaysApi : ", activitiesDaysApi);
@@ -46,7 +47,7 @@ export function ActivityDays({ userId, data, api = false, activiytDaysApi }) {
 
       <ResponsiveContainer width="100%" height="100%">
         <BarChart
-          data={api ? activitiesDaysApi : activityDays}
+          data={activitiesDaysApi}
           margin={{ top: 80, right: 48, bottom: 32, left: 48 }}
           barGap={8}
           barCategoryGap="35%"

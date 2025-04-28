@@ -27,11 +27,9 @@ import {
  * @return {JSX.Element}
  */
 export function SessionDuration({ userId, data, api = false, averageApi }) {
-  const sessions = new Session(userId, data?.userAverageSession)._sessions;
-  console.log("sessions: ", sessions);
+  const sessions = new Session(userId, data)._sessions;
 
-  const sessionsApi = new Session(userId, data?.userAverageSession, averageApi)
-    ._sessionsApi;
+  const sessionsApi = new Session(userId, data, averageApi)._sessionsApi;
   console.log("sessionsApi: ", sessionsApi);
 
   return (
@@ -44,7 +42,7 @@ export function SessionDuration({ userId, data, api = false, averageApi }) {
 
       <ResponsiveContainer aspect={1} width="100%" height="100%">
         <LineChart
-          data={sessions}
+          data={sessionsApi}
           outerRadius="75%"
           margin={{ top: 0, right: 12, bottom: 48, left: 12 }}
         >

@@ -10,7 +10,7 @@ import { formatData, translateToFr } from "../utils/index.js";
 export class RadarAc {
   constructor(userId, data, dataApi) {
     this._userId = userId;
-    this._data = data.userPerformances;
+    this._data = data;
     console.log("Model::", this._data);
     this._dataApi = dataApi;
   }
@@ -21,7 +21,14 @@ export class RadarAc {
    */
   get _activities() {
     let result = {};
+    /*
+[{userId: 12, kind: {…}, data: Array(6)}]
+
+
+*/
+
     this._data.forEach((performance) => {
+      console.log(performance);
       if (performance.userId === parseInt(this._userId)) {
         result = { ...performance };
       }

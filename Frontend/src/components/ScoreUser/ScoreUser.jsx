@@ -3,7 +3,7 @@ import { Score } from "../../model/Score";
 import { ScoreContainer, TextScore, ParagraphScore } from "./index.style";
 import PropTypes from "prop-types";
 
-function ScoreUser({ userId, data, api = false, userApiScore }) {
+function ScoreUser({ userId, data, api = true, userApiScore }) {
   //scoreData
   const scoreData = new Score(userId, data, api);
   console.log("scoreData : ", scoreData);
@@ -14,13 +14,13 @@ function ScoreUser({ userId, data, api = false, userApiScore }) {
   const pieData = [
     {
       name: "completed",
-      value: api ? scoreDataApi.scoreApi : scoreData.score,
-      fillColor: "red",
+      value: api ? scoreDataApi.scoreApi : scoreDataApi.scoreApi,
+      fillColor: "green",
     },
     {
       name: "not-completed",
-      value: 1 - scoreData.score,
-      fillColor: "transparent",
+      value: 1 - scoreDataApi.scoreApi,
+      fillColor: "red",
     },
   ];
   // console.log(pieData);
@@ -48,7 +48,7 @@ function ScoreUser({ userId, data, api = false, userApiScore }) {
       </PieChart>
       {/* </ResponsiveContainer> */}
       <ParagraphScore>
-        <span>{scoreData.score}</span> <br /> de votre <br />
+        <span>{scoreDataApi.scoreApi}</span> <br /> de votre <br />
         objectif
       </ParagraphScore>
     </ScoreContainer>

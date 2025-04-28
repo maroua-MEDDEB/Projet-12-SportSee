@@ -6,7 +6,7 @@
  * @return  {{activity: string, value: number}}    results
  */
 export function formatData(obj) {
-  // console.log("obj==> ", obj);
+  console.log("obj==> ", obj);
   const results = [];
   obj.data.map((nbrKind, key) => {
     if (Object.keys(obj.kind)[key] == nbrKind.kind) {

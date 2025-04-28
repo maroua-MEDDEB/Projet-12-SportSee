@@ -23,12 +23,14 @@ export function RadarActivities({
   api = false,
   performancesApi,
 }) {
-  const performances = new RadarAc(userId, data)._activities;
-  console.log("performances ==> ", performances);
+  console.log(data, performancesApi);
+  const performances = new RadarAc(userId, [performancesApi], [performancesApi])
+    ._activities;
+  // console.log("performances ==> ", performances);
 
-  const performances_Api = new RadarAc(userId, data, performancesApi)
-    ._activitiesApi;
-  console.log("performances_Api ==> ", performances_Api);
+  //const performances_Api = new RadarAc(userId, data, performancesApi)
+  // ._activitiesApi;
+  //console.log("performances_Api ==> ", performances_Api);
 
   return (
     <RadarContainer>

@@ -4,6 +4,7 @@ import Home from "./Pages/Home/Home";
 import NavBarVertical from "./components/NavBarVertical/NavBarVertical";
 import NavBarHorizontal from "./components/NavBarHorizontal/NavBarHorizontal";
 import "./App.css";
+import SportResultsTraining from "./Pages/SportResultsTraining/SportResultsTraining";
 function App() {
   return (
     <>
@@ -11,6 +12,10 @@ function App() {
       <NavBarVertical />
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route
+          path="/sportResults/:userId/"
+          element={<SportResultsTraining />}
+        />
       </Routes>
     </>
   );

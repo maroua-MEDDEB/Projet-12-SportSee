@@ -14,7 +14,7 @@
 export class Session {
   constructor(userId, data, dataApi) {
     this._userId = userId;
-    this._data = data;
+    this._data = data.sessions;
     this._dataApi = dataApi?.sessions;
     // console.log('sessions  ' + data);
   }

@@ -12,156 +12,145 @@ import {
   ItemsMeasure,
 } from "./index.style";
 import { useState, useEffect } from "react";
-import { getAllDataMocked } from "../../service/mockedAPI";
 import { User } from "../../model/User";
 import { ActivityDays } from "../../components/AcivityDays/ActivityDays";
 import ScoreUser from "../../components/ScoreUser/ScoreUser";
 import { SessionDuration } from "../../components/SessionDuration/SessionDuration";
 import { RadarActivities } from "../../components/RadarActivities/RadarActivities";
-import { useSportSeeApi } from "../../service/hook/index.js";
-import Error from "../../Pages/Error/Error";
 
-const initialState = {
-  isLoading: true,
-  error: null,
-  isDataLoaded: false,
-  data: null,
-};
+import Error from "../../Pages/Error/Error";
+import axios from "axios";
 
 function SportResultsTraining() {
-  const [state, setState] = useState(initialState);
+  const [userData, setUserData] = useState({
+    mainInfos: {},
+    activity: {},
+    averageSessions: {},
+    performance: {},
+  });
 
-  const { userId, api } = useParams(); // déstrcuturer cet ensemble du poramètre - accéder au parapmètres de l'url courant
+  const { userId } = useParams(); // déstrcuturer cet ensemble du poramètre - accéder au parapmètres de l'url courant
   // const api = false;
-
-  const navigate = useNavigate();
-  if (!["12", "18"].includes(userId)) {
-    navigate("/Error");
-  }
-
-  const {
-    userApi,
-    sessionsApi,
-    performancesApi,
-    averageApi,
-    isApiLoading,
-    errorApi,
-  } = useSportSeeApi(userId);
-
-  const { isLoading, isDataLoaded, data: mockedData, error } = state;
-
-  const firstName = new User(userId, mockedData)._firstName || "unknown user";
-
-  const { nutriments, values } = new User(
-    userId,
-    mockedData?.userMainData,
-    false
-  )._keyData;
-  // console.log(nutriments);
 
   const icons_unit_infos = ["kCal", "g", "g", "g"];
 
-  const showTypes = nutriments.map((el, index) => {
-    return (
-      <CardInfos
-        key={index}
-        text_type={el.text_type}
-        icon_type={el.icon_type}
-        value={values[index]}
-        unity={icons_unit_infos[index]}
-      />
-    );
-  });
+  // const showTypes = nutriments.map((el, index) => {
+  //   return (
+  //     <CardInfos
+  //       key={index}
+  //       text_type={el.text_type}
+  //       icon_type={el.icon_type}
+  //       value={values[index]}
+  //       unity={icons_unit_infos[index]}
+  //     />
+  //   );
+  // });
+
+  async function getUserAllData() {
+    try {
+      const mainInfos = await axios.get(`http://localhost:3000/user/${userId}`);
+      setUserData((prev) => ({ ...prev, mainInfos: mainInfos.data }));
+
+      const activity = await axios.get(
+        `http://localhost:3000/user/${userId}/activity`
+      );
+      console.log(activity.data);
+      setUserData((prev) => ({ ...prev, activity: activity.data }));
+
+      const averageSessions = await axios.get(
+        `http://localhost:3000/user/${userId}/average-sessions`
+      );
+      console.log(averageSessions.data.sessions);
+      setUserData((prev) => ({
+        ...prev,
+        averageSessions: averageSessions.data,
+      }));
+
+      const performance = await axios.get(
+        `http://localhost:3000/user/${userId}/performance`
+      );
+      setUserData((prev) => ({ ...prev, performance: performance.data }));
+    } catch (error) {
+      console.error("Error fetching user data:", error);
+    }
+  }
 
   useEffect(() => {
-    /**
-     * récupérer les données des deux utilisateurs
-     * Retrieves all data using a mocked API endpoint.
-     *@return {Promise} A promise that resolves with the data response.
-     */
-    async function getMockedData() {
-      try {
-        const userData = await getAllDataMocked();
+    getUserAllData();
+  }, []);
 
-        setState({
-          ...state,
-          data: userData,
-          isDataLoaded: true,
-          error: "",
-          isLoading: false,
-        });
-      } catch (error) {
-        setState({ ...state, error: error, isLoading: false });
-      }
-    }
-    if (["12", "18"].includes(userId)) {
-      getMockedData();
-    }
-    setState({ ...state, isLoading: false });
-    console.log("state: ", state);
-  }, [navigate, userId]);
+  useEffect(() => {
+    console.log("average sessions ", userData.averageSessions);
+  }, [userData]);
 
-  if (isLoading || isApiLoading) return <p> loading...</p>;
+  return (
+    <ContainerProfilUser>
+      <header>
+        <HeaderTitle>
+          <h1>Bonjour</h1>
+          <NameUser> {userData.mainInfos.userInfos?.firstName}</NameUser>
+        </HeaderTitle>
+        <span>Félicitation ! Vous avez explosé vos objectifs hier 👏</span>
+      </header>
 
-  if (errorApi || error) {
-    return <Error />;
-  }
+      <SectionInfos>
+        <ItemsActivitySport>
+          {/* TOP: full-width ActivityDays */}
+          <Item_activity style={{ width: "100%" }}>
+            {userData.activity.sessions && (
+              <ActivityDays
+                userId={userId}
+                data={userData.activity}
+                activiytDaysApi={userData.activity.sessions}
+                api={true}
+              />
+            )}
+          </Item_activity>
 
-  if (isDataLoaded) {
-    return (
-      <>
-        <ContainerProfilUser>
-          <header>
-            <HeaderTitle>
-              <h1>Bonjour</h1>
-              <NameUser>
-                {" "}
-                {!isLoading && api ? userApi?.userInfos?.firstName : firstName}
-              </NameUser>
-            </HeaderTitle>
-            <span>Félicitation ! Vous avez explosé vos objectifs hier 👏</span>
-          </header>
-
-          <SectionInfos>
-            <ItemsActivitySport>
-              <Item_activity>
-                <ActivityDays
-                  userId={userId}
-                  data={mockedData}
-                  activiytDaysApi={sessionsApi?.sessions}
-                  api={api}
-                />
-              </Item_activity>
-              <ItemsMeasure>
+          {/* BELOW: three boxes side-by-side */}
+          <div style={{ display: "flex", gap: "20px", marginTop: "20px" }}>
+            <ItemsMeasure style={{ flex: 1 }}>
+              {userData.averageSessions.sessions?.length > 0 && (
                 <SessionDuration
                   userId={userId}
-                  data={mockedData}
-                  averageApi={averageApi}
-                  api={api}
+                  data={userData.averageSessions}
+                  averageApi={userData.averageSessions}
+                  api={true}
                 />
-                {/* <div>RadarActivities</div> */}
+              )}
+            </ItemsMeasure>
+
+            <ItemsMeasure style={{ flex: 1 }}>
+              {userData.performance.data?.length > 0 && (
                 <RadarActivities
                   userId={userId}
-                  data={mockedData}
-                  performancesApi={performancesApi}
-                  api={api}
+                  data={userData.performance}
+                  performancesApi={userData.performance}
+                  api={true}
                 />
+              )}
+            </ItemsMeasure>
+
+            <ItemsMeasure style={{ flex: 1 }}>
+              {userData.mainInfos.todayScore && (
                 <ScoreUser
                   userId={userId}
-                  data={mockedData}
-                  userApiScore={userApi.score}
-                  api={api}
+                  data={userData.mainInfos.todayScore}
+                  userApiScore={userData.mainInfos.todayScore}
+                  api={true}
                 />
-              </ItemsMeasure>
-            </ItemsActivitySport>
-            <GridCards>
-              <CardInformations>{showTypes}</CardInformations>
-            </GridCards>
-          </SectionInfos>
-        </ContainerProfilUser>
-      </>
-    );
-  }
+              )}
+            </ItemsMeasure>
+          </div>
+        </ItemsActivitySport>
+
+        {/* You can handle cards later here */}
+        <GridCards>
+          {/* <CardInformations>{showTypes}</CardInformations> */}
+        </GridCards>
+      </SectionInfos>
+    </ContainerProfilUser>
+  );
 }
 
 export default SportResultsTraining;

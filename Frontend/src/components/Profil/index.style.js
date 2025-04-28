@@ -16,6 +16,6 @@ export const ListUsers = styled.ul`
   flex-direction: column;
   align-items: center;
 `;
-export const UserProfile = styled.a`
+export const UserProfile = styled.span`
   text-decoration: none;
 `;
