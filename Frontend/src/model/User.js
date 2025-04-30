@@ -2,6 +2,7 @@ import calorieIcon from "../assets/images/icons_cards/icon-calorie.png";
 import carbohydrateIcon from "../assets/images/icons_cards/icon-carbohydrate.png";
 import proteinIcon from "../assets/images/icons_cards/icon-protein.png";
 import lipidIcon from "../assets/images/icons_cards/icon-lipid.png";
+
 // @ts-nocheck
 
 /**Constructor Pattern - User

@@ -1,5 +1,9 @@
 import { useParams, useNavigate } from "react-router-dom";
 import CardInfos from "../../components/CardInfos/CardInfos";
+import calorieIcon from "../../assets/images/icons_cards/icon-calorie.png";
+import carbohydrateIcon from "../../assets/images/icons_cards/icon-carbohydrate.png";
+import proteinIcon from "../../assets/images/icons_cards/icon-protein.png";
+import lipidIcon from "../../assets/images/icons_cards/icon-lipid.png";
 import {
   ContainerProfilUser,
   HeaderTitle,
@@ -32,19 +36,34 @@ function SportResultsTraining() {
   const { userId } = useParams(); // déstrcuturer cet ensemble du poramètre - accéder au parapmètres de l'url courant
   // const api = false;
 
-  const icons_unit_infos = ["kCal", "g", "g", "g"];
+  function ReturnNutriments() {
+    const icons_unit_infos = ["kCal", "g", "g", "g"];
 
-  // const showTypes = nutriments.map((el, index) => {
-  //   return (
-  //     <CardInfos
-  //       key={index}
-  //       text_type={el.text_type}
-  //       icon_type={el.icon_type}
-  //       value={values[index]}
-  //       unity={icons_unit_infos[index]}
-  //     />
-  //   );
-  // });
+    const nutriments = [
+      { icon_type: calorieIcon, text_type: "Calories" },
+      { icon_type: proteinIcon, text_type: "Proteines" },
+      { icon_type: carbohydrateIcon, text_type: "Glucides" },
+      { icon_type: lipidIcon, text_type: "Lipides" },
+    ];
+    let values = new Array(5);
+    values = Object.values(userData?.mainInfos?.keyData);
+    console.log(userData?.mainInfos?.keyData);
+    return (
+      <>
+        {nutriments.map((el, index) => {
+          return (
+            <CardInfos
+              key={index}
+              text_type={el.text_type}
+              icon_type={el.icon_type}
+              value={values[index]}
+              unity={icons_unit_infos[index]}
+            />
+          );
+        })}
+      </>
+    );
+  }
 
   async function getUserAllData() {
     try {
@@ -146,7 +165,9 @@ function SportResultsTraining() {
 
         {/* You can handle cards later here */}
         <GridCards>
-          {/* <CardInformations>{showTypes}</CardInformations> */}
+          <CardInformations>
+            {userData.mainInfos?.keyData && <ReturnNutriments />}
+          </CardInformations>
         </GridCards>
       </SectionInfos>
     </ContainerProfilUser>
